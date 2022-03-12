@@ -52,6 +52,15 @@ fn main() {
 
         // **OPTION**
         // Brighten -- see the brighten() function below
+        "brighten" => {
+            if args.len() != 3 {
+                print_usage_and_exit();
+            }
+            let infile = args.remove(0);
+            let outfile = args.remove(0);
+            let brightness = args.remove(0).parse::<i32>().expect("Unable to parse brightness argument");
+            brighten(infile, outfile, brightness);
+        }
 
         // **OPTION**
         // Crop -- see the crop() function below
@@ -104,8 +113,11 @@ fn blur(infile: String, outfile: String) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-fn brighten(infile: String, outfile: String) {
+fn brighten(infile: String, outfile: String, brightness: i32) {
     // See blur() for an example of how to open / save an image.
+    let img = image::open(infile).expect("Failed to open INFILE.");
+    let img2 = img.brighten(brightness);
+    img2.save(outfile).expect("Failed writing OUTFILE.");
 
     // .brighten() takes one argument, an i32.  Positive numbers brighten the
     // image. Negative numbers darken it.  It returns a new image.
